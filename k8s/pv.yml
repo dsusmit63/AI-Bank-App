@@ -1,0 +1,33 @@
+# PERSISTENT VOLUME FOR MYSQL
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    app: mysql-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data/mysqldata"
+
+# PERSISTENT VOLUME FOR OLLAMA
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ollama-pv
+  labels:
+    app: ollama-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data/ollamadata"

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  secuity-events: write
+  security-events: write
 jobs:
   # ============================================================
   # GATE 1: SECRET SCANNING (Gitleaks)

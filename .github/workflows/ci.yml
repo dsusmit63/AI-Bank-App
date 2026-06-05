@@ -1,6 +1,6 @@
 name: CI Workflow
 on:
-  workflow_call:
+  workflow_dispatch:
 permissions:
   contents: read
   secuity-events: write

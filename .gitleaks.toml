@@ -1,0 +1,8 @@
+title = "Gitleaks Configuration"
+
+[allowlist]
+description = "Allow Kubernetes secret template used for learning project"
+
+paths = [
+  '''k8s/secrets.yml'''
+]

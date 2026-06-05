@@ -37,3 +37,20 @@ jobs:
           cache: maven
       - name: Run Checkstyle
         run: mvn checkstyle:check || true # Audit mode for now to avoid blocking on style, later use Strict mode
+  # =============================================================
+  # GATE 3: SAST - Static Application Security Testing
+  # =============================================================
+  sast:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    needs: [gitleaks,lint]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Run Semgrep SAST Scan
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/java
+            p/owasp-top-ten
+            p/secrets

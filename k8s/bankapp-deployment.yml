@@ -45,6 +45,8 @@ spec:
       containers:
         - name: bankapp
           image: dsusmit63/ai-bankapp:latest
+          securityContext:
+            allowPrivilegeEscalation: false
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

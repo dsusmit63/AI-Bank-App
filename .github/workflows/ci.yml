@@ -94,7 +94,10 @@ jobs:
           key: owasp-nvd-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             owasp-nvd-${{ runner.os }}-
-      # CVSS threshold is configured in pom.xml.
+      - name: Debug Dependency Check Cache
+        if: always()
+        run: |
+          find ~/.m2 -type d | grep dependency || true
       # Currently set to 11 for pipeline validation.
       # Later reduce to 7 or 8 for production security gating.
       - name: Run OWASP Dependency Check

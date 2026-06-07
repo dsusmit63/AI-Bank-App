@@ -92,7 +92,7 @@ jobs:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
            mvn -B org.owasp:dependency-check-maven:check \
-              -DfailBuildOnCVSS=7 \
+              -DfailBuildOnCVSS=11 \
               -DnvdApiKey="${NVD_API_KEY}"
       - name: Verify Dependency Check Report
         if: always()

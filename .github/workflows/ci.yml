@@ -11,6 +11,7 @@ jobs:
   gitleaks:
     name: Secret Scan - Gitleaks
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -26,6 +27,7 @@ jobs:
   lint:
     name: Lint - Checkstyle
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -50,6 +52,7 @@ jobs:
   sast:
     name: SAST - Semgrep
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -78,6 +81,7 @@ jobs:
   sca:
     name: SCA - Owasp Dependency Check
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

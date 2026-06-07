@@ -36,7 +36,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Run Checkstyle
-        run: mvn checkstyle:check || true # Audit mode for now to avoid blocking on style, later use Strict mode
+        run: |
+          mvn checkstyle:check
+      - name: Upload Linting Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: checkstyle-report
+          path: target/checkstyle-result.xml
   # =============================================================
   # GATE 3: SAST - Static Application Security Testing
   # =============================================================
@@ -54,3 +61,40 @@ jobs:
             p/java
             p/owasp-top-ten
             p/secrets
+  # ==============================================================
+  # GATE 4: SCA - Software Composition Analysis
+  # ==============================================================
+  sca:
+    name: SCA - Owasp Dependency Check
+    runs-on: ubuntu-latest
+    needs: [gitleaks,lint]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Cache OWASP NVD Database
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: owasp-nvd-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            owasp-nvd-${{ runner.os }}-
+      - name: Run OWASP Dependency Check
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+           mvn org.owasp:dependency-check-maven:check \
+              -DfailBuildOnCVSS=7 \
+              -DnvdApiKey="${NVD_API_KEY}" \
+              -DsuppressionFile=suppression.xml
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owasp-dependency-check-report
+          path: target/dependency-check-report.html

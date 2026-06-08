@@ -124,6 +124,7 @@ jobs:
     name: Build & Package
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    needs: [secret-scan,lint,sast,sca]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

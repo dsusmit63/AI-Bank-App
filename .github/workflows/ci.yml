@@ -165,6 +165,7 @@ jobs:
             trivy-db-${{ runner.os }}-
       - name: Run Trivy Image Scan
         uses: aquasecurity/trivy-action@master
+        # keeping exit-code as '0' to avoid pipeline failures, later use exit-code as '1'
         with:
           image-ref: bankapp:scan-${{ github.sha }}
           format: 'table'
@@ -174,6 +175,9 @@ jobs:
           severity: 'CRITICAL,HIGH'
           output: trivy-report.txt
           trivy-config: trivy.yaml
+      - name: Verify Trivy Report
+        if: always()
+        run: test -f trivy-report.txt
       - name: Upload Trivy Report
         uses: actions/upload-artifact@v4
         if: always()

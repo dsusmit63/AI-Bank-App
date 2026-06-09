@@ -151,6 +151,7 @@ jobs:
   image-scan:
     name: Image Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
     steps:
       - name: Checkout Code

@@ -4,6 +4,7 @@ on:
 permissions:
   contents: read
   security-events: write
+  id-token: write
 jobs:
   # ============================================================
   # GATE 1: SECRET SCANNING (Gitleaks)
@@ -145,7 +146,7 @@ jobs:
           name: app-jar
           path: target/*.jar
   # ================================================================
-  # IMAGE SCAN - TRIVY
+  # GATE 6: IMAGE SCAN - TRIVY
   # ================================================================
   image-scan:
     name: Image Scan
@@ -184,3 +185,36 @@ jobs:
         with:
           name: trivy-scan-report
           path: trivy-report.txt
+  # =====================================================================
+  # GATE 7: PUSH TO ECR
+  # =====================================================================
+  push-to-ecr:
+    name: Push to ECR
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: image-scan
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, Tag, and Push Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build --pull -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Verify Image Exists in ECR
+        run: |
+          aws ecr describe-images \
+            --repository-name ${{ secrets.ECR_REPOSITORY }} \
+              --image-ids imageTag=${{ github.sha }}
+

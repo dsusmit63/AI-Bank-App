@@ -1,1 +1,7 @@
+# Environment Variables
 .env
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+

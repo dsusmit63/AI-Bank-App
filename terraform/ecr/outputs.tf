@@ -4,5 +4,5 @@ output "repository_name" {
 }
 output "repository_url" {
   description = "ECR Repository URL"
-  value = aws_ecr_repository.bankapp-repository.repository_url
+  value       = aws_ecr_repository.bankapp-repository.repository_url
 }

@@ -1,6 +1,6 @@
 locals {
   common_tags = {
-    Project     = "AI-Bank-App"
+    Project     = var.project_name
     Environment = var.environment_name
     ManagedBy   = "Terraform"
     Owner       = "Susmit Das"

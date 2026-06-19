@@ -4,11 +4,11 @@ variable "aws_region" {
 }
 variable "project_name" {
   description = "Project Name"
-  type = string
+  type        = string
 }
 variable "environment_name" {
   description = "Environment Name"
-  type = string
+  type        = string
 }
 variable "cluster_name" {
   description = "Cluster Name"

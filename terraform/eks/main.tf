@@ -18,7 +18,7 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
   eks_managed_node_groups = {
     default = {
-      name = "bankapp-ng"
+      name           = "bankapp-ng"
       instance_types = ["t3.medium"]
       min_size       = 1
       max_size       = 2
@@ -38,7 +38,7 @@ module "eks" {
     }
   }
   tags = merge(local.common_tags,
-  {
-    Name = var.cluster_name
+    {
+      Name = var.cluster_name
   })
 }

@@ -3,7 +3,7 @@ variable "aws_region" {
   description = "AWS Region"
 }
 variable "project_name" {
-  type = string
+  type        = string
   description = "Project Name"
 }
 variable "environment_name" {

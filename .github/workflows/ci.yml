@@ -67,9 +67,15 @@ jobs:
             p/owasp-top-ten
             p/secrets
           generateSarif: "1"
+      - name: Debug SARIF
+        if: always()
+        run: |
+          pwd
+          ls -la
+          find . -name "*.sarif"
       - name: Upload SARIF Report to GitHub Security
         if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep.sarif
   # ==============================================================

@@ -104,20 +104,19 @@ jobs:
       - name: Cache OWASP NVD Database
         uses: actions/cache@v4
         with:
-          path: ~/.dependency-check
-          key: dependency-check-${{ runner.os }}
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: owasp-nvd-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            dependency-check-
+            owasp-nvd-${{ runner.os }}-
       # Currently set to 11 for pipeline validation.
       # Later reduce to 7 or 8 for production security gating.
       - name: Run OWASP Dependency Check
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-           mvn -B org.owasp:dependency-check-maven:check \
-              -DdataDirectory=$HOME/.dependency-check \
-              -DfailBuildOnCVSS=11 \
-              -DnvdApiKey="${NVD_API_KEY}"
+           mvn org.owasp:dependency-check-maven:check \
+            -DfailBuildOnCVSS=11 \
+            -DnvdApiKey="${NVD_API_KEY}" \
       - name: Verify Dependency Check Report
         if: always()
         run: |

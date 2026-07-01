@@ -66,7 +66,14 @@ jobs:
             p/java
             p/owasp-top-ten
             p/secrets
-          generateSarif: "1"
+      - name: Generate SARIF Report
+        run: |
+          semgrep scan \
+          --config=p/java \
+          --config=p/owasp-top-ten \
+          --config=p/secrets \
+          --sarif \
+          --output=semgrep.sarif
       - name: Debug SARIF
         if: always()
         run: |

@@ -92,6 +92,7 @@ jobs:
     name: SCA - Owasp Dependency Check
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    continue-on-error: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

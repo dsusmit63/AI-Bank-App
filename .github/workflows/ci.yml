@@ -117,6 +117,7 @@ jobs:
            mvn org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=11 \
             -DnvdApiKey="${NVD_API_KEY}" \
+            -Dnoupdate=true
       - name: Verify Dependency Check Report
         if: always()
         run: |
